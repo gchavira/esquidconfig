@@ -1,0 +1,9 @@
+h1. Welcome to ESQUIDConfig
+
+h2. SQUID Web based Configuration Manager
+
+This project is a web-based manager for the Web Proxy SQUID.
+
+Instructions at "ElectroSystems Web Site":http://www.e-electrosystems.com/modules/custom/page_projects.php  
+
+
