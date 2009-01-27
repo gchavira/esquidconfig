@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>eSQUIDConfig SQUID Editor de Dominios de SQUID</title>
+		<%= javascript_include_tag :defaults %>
+		<%= active_scaffold_includes %>
+		<%= stylesheet_link_tag 'application' %>
+	</head>
+	<body>
+		<div id='header' class='toplevel mainheader'>
+			<h1>eSQUIDConfig</h1>
+			<h3>Editor de Dominios de SQUID</h3>
+			<ul id="mainmenu">
+				<li><%= link_to 'Usuarios', :controller => 'users', :action => 'index' %></li>
+				<li><%= link_to 'Dominios', :controller => 'domains', :action => 'index' %></li>
+				<li><%= link_to 'Salir', :controller => 'users', :action => 'logout' %></li>
+			</ul>
+		</div>
+		<div id='body' class='toplevel maincontent'>
+			<%= yield %>
+		</div>
+		<div id='footer' class='toplevel mainfooter'>
+			Derechos Reservados Copyright &copy; 2008 ElectroSystems S. de R.L. de C.V.
+		</div>
+	</body>
+</html>

@@ -1,0 +1,15 @@
+<h4>Importar de SQUID</h4>
+<% if @domains.length > 0 %>
+	<h3>Dominios Importados:</h3>
+	<p class='console'>
+		<strong>Dominios:</strong>
+		<br />
+		<%=h @domains.to_sentence %>
+		<br />
+	<p>
+	<%= link_to 'Recargar Lista de Dominios', :controller => 'domains' %>
+<% else %>
+	<h3>No se importaton dominios nuevos</h3>
+	<p>Advertencia: Si usted sabe que hay alg&uacuten; dominio que debi&oacute; ser importado, por favor revise la sintaxis del dominio e intente de nuevo</p>
+<% end %>
+

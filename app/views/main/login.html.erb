@@ -1,0 +1,33 @@
+<% form_tag do %>
+	<table class='esform'>	
+		<caption>Ingreso</caption>
+		<thead>
+			<tr>
+				<th colspan='2'>
+					Por favor introduzca sus credenciales
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<th>Usuario:</th>
+				<td><%= text_field_tag 'username', '', { :id => 'username' } %></td>
+			</tr>
+			<tr>
+				<th>Password:</th>
+				<td><%= password_field_tag 'password', '', { :id => 'password' } %></td>
+			</tr>
+		</tbody>
+		<tfoot>
+			<tr>
+				<th>&nbsp;</th>
+				<th><%= submit_tag 'Ingresar' %></th>
+			</tr>
+			<tr>
+				<td colspan='2'>
+					* ambos campos son requeridos
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+<% end %>

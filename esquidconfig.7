@@ -1,0 +1,283 @@
+.TH eSQUIDConfig 7 "January 15, 2009" "eSQUIDConfig" "ElectroSystems"
+
+.DD January 15, 2009
+.DT eSQUIDConfig 7
+.OS
+.ND Allows management of SQUID access and permissions
+
+.SH How To Install eSQUIDConfig
+
+.P
+The following are detailed instructions on how to install and run eSQUIDConfig
+
+.SS 1. Remove SQUID and SARG
+.P
+We will be removing the existing SQUID since we want no old configuration getting in the middle, so stop squid:
+
+.RS
+.B $ service squid stop
+.RE
+
+.P
+First of all get rid of the old SQUID, don't try to update it because it will leave broken stuff behind.
+
+.RS
+.nf
+.B $ yum remove squid sarg
+.B $ rm -rf /etc/squid
+.B $ rm -rf /var/spool/squid
+.fi
+.RE
+
+.SS "2. Re-install SQUID and SARG with YUM
+
+.P
+Run this in your console:
+
+.RS
+.B $ yum install squid sarg
+.RE
+
+.SS 3. Set needed options in /etc/squid/squid.conf
+
+.P
+Set the following options in 
+.B /etc/squid/squid.conf
+
+.RS
+.nf
+.B httpd_accel_host virtual
+.B httpd_accel_port 80
+.B httpd_accel_with_proxy on
+.B httpd_accel_uses_host_header on
+.fi
+.RE
+
+
+.SS 4. Set up iptables
+
+.P
+Supposing your Internet interface is eth0 and your local network is on eth1,
+add the following to your iptables, if they're not already there
+
+.RS
+.nf
+.B $ iptables -t nat -A PREROUTING -i eth1 -p tcp --dport 80 -j REDIRECT --to-port 3128
+.B $ iptables -A INPUT -j ACCEPT -m state --state NEW,ESTABLISHED,RELATED -i eth1 -p tcp --dport 3128
+.B $ iptables -A OUTPUT -j ACCEPT -m state --state NEW,ESTABLISHED,RELATED -o eth0 -p tcp --dport 80
+.B $ iptables -A INPUT -j ACCEPT -m state --state ESTABLISHED,RELATED -i eth0 -p tcp --sport 80
+.B $ iptables -A OUTPUT -j ACCEPT -m state --state ESTABLISHED,RELATED -o eth1 -p tcp --sport 80
+.fi
+.RE
+
+.SS 5. Access Control Lists for squid.conf
+
+.P
+Add the following Access Control List to your /etc/squid/squid.conf, right after the line 
+.nf
+.B acl CONNECT method CONNECT
+.fi
+
+
+.RS
+.nf
+.B acl es_allowed dstdomain "/etc/squid/es_allowed.acl"
+.B acl restriccion src iprestringidainicial1-iprestringidafinal1 iprestringidainicial2-iprestringidafinal2 etc. etc.
+.B acl sin_restriccion src iplibreinicial1-iplibrefinal1 iplibreinicial2-iplibrefinal2
+.fi
+.RE
+
+.SS 6. Add rules for ACLs to /etc/squid/squid.conf
+.P
+Add the following Access Rules to 
+.B /etc/squid/squid.conf
+right 
+.B before
+the line 
+.B http_access deny all
+
+.RS
+.nf
+This one must be just before http_access deny all:
+.B http_access allow es_allowed restriccion	
+
+This one must be just before http_access deny all:
+.B http_access allow sin_restriccion		
+.fi
+.RE
+
+
+.SS 7. Set up es_allowed.acl
+.P
+After all this is done just add the allowed domains to the 
+.B /etc/squid/es_allowed.acl
+file one per line like the following examples
+
+.RS
+.nf
+.B .google.com
+.B .google.com.mx
+.B .citibank.com
+.B ...
+.fi
+.RE
+
+
+.SS 8. Restart your SQUID 
+.P
+Restart your SQUID (or reload, I prefer to restart when I make big changes)
+
+.RS
+.B $ service squid restart
+.RE
+
+.SS 9 Install Ruby from source (preferred)
+.P
+Move to local source directory
+
+.RS
+.B $ cd /usr/local/src
+.RE
+
+CentOS Packages tend to be outdated, get latest Ruby from 
+.B http://ftp.ruby-lang.org/pub/ruby/
+
+.RS
+.B $ wget http://ftp.ruby-lang.org/pub/ruby/1.8/ruby-1.8.6.tar.gz
+.RE
+
+Untar the source and cd into it.
+
+.RS
+.nf
+.B $ tar xvfz ruby-1.8.6.tar.gz
+.B $ cd ruby-1.8.6
+.fi
+.RE
+
+Now make and install Ruby
+
+.RS
+.nf
+.B $ ./configure
+.B $ make && make install
+.fi
+.RE
+
+.SS 10. Install Ruby Gems from Source
+.P
+Download latest Ruby Gems from 
+.B http://rubyforge.org/projects/rubygems/
+
+.RS
+.nf
+.B $ wget http://rubyforge.org/frs/download.php/35283/rubygems-1.1.1.tgz
+.B $ tar xvfz rubygems-1.1.1.tgz
+.B $ cd rubygems-1.1.1
+.B $ ruby setup.rb
+.fi
+.RE
+
+.SS 11. Install Latest Rails
+.P
+Time to install the latest Ruby on Rails
+
+.RS
+.B $ gem install rails -r -y --no-ri --no-rdoc
+.RE
+
+.SS 12. Install Rails 2.0.2
+.P
+Now install the specific Ruby on Rails version we need
+
+.RS
+.B $ gem install rails -r -y --no-ri --no-rdoc -v 2.0.2
+.RE
+
+.SS 13. Install SQLite 3
+.P
+Make sure the version you're installing is 
+.B 3.0+
+
+.RS
+.B $ yum install sqlite sqlite-devel
+.RE
+
+.SS 14. Install SQLite 3 Ruby Gem
+.P
+Use the gem command.
+
+.RS
+.B $ gem install sqlite3-ruby -r -y --no-rdoc --no-ri
+.RE
+
+.SS 15. Install Mongrel Web Server
+.P Use the gem command
+
+.RS
+.B $ gem install mongrel -y -r --no-ri –no-rdoc
+.RE
+
+.SS 16. Install eSQUIDConfig
+
+.RS
+.nf
+.B $ cd /opt
+.B $ git clone root@e-electrosystemsnet.com:/git/esquidconfig.git
+.B $ cd esquidconfig
+.B $ rake tmp:clear
+.B $ rake log:clear
+.B $ rake db:migrate VERSION=0
+.B $ rake db:migrate
+.fi
+.RE
+
+.SS 17. Make it auto-start
+.P
+Add an auto start command to rc.local
+
+.RS
+.B $ echo “/usr/local/bin/mongrel_rails start -d -p 8002 -c /opt/esquidconfig” >> /etc/rc.local
+.RE
+
+.SS 18. Start Server for The First Time
+.P
+Fire it up!
+
+.RS
+.B $ /usr/local/bin/mongrel_rails start -d -p 8002 -c /opt/esquidconfig
+.RE
+
+.SS 19. How to Stop the Server When Needed.
+.P
+If you want to stop the server issue the following command:
+
+.RS
+.B $ /usr/local/bin/mongrel_rails stop -c /opt/esquidconfig
+.RE
+
+.SS 20. How to Access Your New Server
+.P
+To Access the installed 
+.B eSQUIDConfig
+go to:
+
+.RS
+.B http://<serverip>:8002/
+.RE
+
+Your default credentials are
+.RS
+.nf
+.B    login: admin
+.B password: admin
+.fi
+.RE
+
+.SH Things TO DO after install
+.P
+First thing you should do is import all the domains you added to your 
+.B /etc/squid/es_allowed.acl
+from within the web interface.
+
+.SH That's all! Enjoy

@@ -1,0 +1,36 @@
+<h4>Exportar a SQUID</h4>
+<% if @domains.length > 0 %>
+	<h3>Resultados de Recarga de Configuraci&oacute;n SQUID</h3>
+	<p class='console'>
+		<strong>Resultados:</strong>
+	</p>
+	<p>&nbsp;</p>
+	<p class='console' style='color:red; background-color:white; padding:3px; font-weight:bold;'>
+		<%= h(@squidreload.join).gsub("\n", "<br />") %>
+	</p>
+	<p>&nbsp;</p>
+	<p style='padding:3px; border: 3px solid red; background-color:white; color:red; font-weight:bold; font-size:1.2em;'>
+	ADVERTENCIA! ADVERTENCIA! ADVERTENCIA!<br />
+	Observe el cuadro previo a este!!!!!<br />
+	<br />
+	CORRECTO: Debe estar vacio, si se export&oacute; correctamente.<br />
+	ERROR: Si ocurri&oacute; alg&uacute;n error, se mostrar&aacute; en rojo en el cuadro superior.<br />
+	<br />
+	Si ocurri&oacute; alg&uacute;n error, los cambios no se aplicar&aacute;n,<br />
+	por favor corrijalo, o reportelo a su administrador de sistemas
+	</p>
+
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+	<h3>Dominios enviados a exportar:</h3>
+	<p class='console'>
+		<strong>Dominios:</strong>
+		<br />
+		<%=h @domains.to_sentence %>
+		<br />
+	</p>
+<% else %>
+	<h3>No se exportaron dominios</h3>
+	<p>Intente agregando algunos dominios a la lista o activar alguno ya existente</p>
+<% end %>
+

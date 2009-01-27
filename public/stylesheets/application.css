@@ -1,0 +1,117 @@
+html, body {
+	margin:0px;
+	padding:0px;
+}
+
+body {
+	font-family: Arial, helvetica, sans-serif;
+	font-size:.81em;
+	background-color: navy;
+}
+
+h1, h2, h3, h4, h5, h6, h7, p {
+	margin:0px;
+	padding:0px;
+	line-height: normal;
+}
+
+.toplevel {
+	padding:14px;
+	text-align:left;
+}
+
+#header, #footer {
+	color: white;
+	font-weight: bold;
+}
+
+#footer {
+	font-size:0.8em;
+}
+
+#body {
+	background-color: white;
+	clear: both;
+}
+
+.console {
+	border: 2px solid #003300;
+	color: #003300;
+	background-color: #EEFFEE;
+	padding: 12px;
+	margin: 7px 0px 12px 0px;
+}
+
+ul#mainmenu {
+	list-style:none;
+	margin:0px;
+	padding:0px;
+	display:block;
+}
+
+ul#mainmenu li {
+	display:block;
+	float:left;
+	padding:0px;
+	margin:0px;
+}
+
+ul#mainmenu li a {
+	color:white;
+	display:block;
+	padding:3px 7px;
+	margin:3px 7px 7px 0px;
+	border:2px solid white;
+	background-color:navy;
+	text-decoration: none;
+}
+
+ul#mainmenu li a:hover {
+	color:navy;
+	background-color: white;
+}
+
+table.esform {
+	table-layout: auto;
+	padding:2px;
+	border:2px solid navy;
+}
+
+table.esform caption {
+	text-align:center;
+	border: 2px solid navy;
+	color:navy;
+	font-size:1.2em;
+	margin: 0px 0px 3px 0px;
+	font-weight: bold;
+}
+
+table.esform thead th {
+	text-align:center;
+}
+
+table.esform tbody th {
+	text-align:right;
+}
+
+table.esform tbody td {
+	text-align:left;
+}
+
+table.esform th, table.esform td {
+	padding: 3px 5px 3px 3px;
+}
+
+table.esform th {
+	background-color: navy;
+	color:white;
+}
+
+table.esform tfoot td {
+	font-size:0.71em;
+	color:navy;
+	border:1px solid navy;
+	text-align: center; 	
+}
+
+

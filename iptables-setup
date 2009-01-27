@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+ETHINT=$1
+ETHEXT=$2
+
+cp /etc/sysconfig/iptables /etc/sysconfig/iptables.`date +'%Y%m%d%H%M%S'`.esquidconfig
+
+iptables -F -t nat
+iptables -F -t mangle
+iptables -F -t filter
+
+iptables -X -t nat
+iptables -X -t mangle
+iptables -X -t filter
+
+iptables -Z -t nat
+iptables -Z -t mangle
+iptables -Z -t filter
+
+iptables -t nat -A POSTROUTING -o $ETHEXT -j MASQUERADE
+iptables -t nat -A PREROUTING  -i $ETHINT -p tcp --dport 80 -j REDIRECT --to-port 3128
+iptables        -A INPUT                                    -j ACCEPT -m state --state NEW,ESTABLISHED,RELATED -i $ETHINT -p tcp --dport 3128 
+iptables        -A OUTPUT                                   -j ACCEPT -m state --state NEW,ESTABLISHED,RELATED -o $ETHEXT -p tcp --dport 80
+iptables        -A INPUT                                    -j ACCEPT -m state --state ESTABLISHED,RELATED     -i $ETHEXT -p tcp --sport 80
+iptables        -A OUTPUT                                   -j ACCEPT -m state --state ESTABLISHED,RELATED     -o $ETHINT -p tcp --sport 80
+
+iptables-save > /etc/sysconfig/iptables
+
+TMPF=`mktemp`
+
+echo "MANGLE" >> $TMPF
+echo "======================================" >> $TMPF
+iptables -L -v -t mangle >> $TMPF
+echo >> $TMPF
+echo >> $TMPF
+
+echo "NAT" >> $TMPF
+echo "======================================" >> $TMPF
+iptables -L -v -t nat >> $TMPF
+echo >> $TMPF
+echo >> $TMPF
+
+echo "FILTER" >> $TMPF
+echo "======================================" >> $TMPF
+iptables -L -v -t filter >> $TMPF
+echo >> $TMPF
+echo >> $TMPF
+
+less -S#3NM~g $TMPF
+
+rm -rf $TMPF
+
+
